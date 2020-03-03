@@ -63,16 +63,24 @@ public class Board extends JPanel{
 }
     
     
-    public Board(){
+    private Board(){
         super();
-        setFocusable(true);
         playBoard = new Tetrominoes[NUM_ROWS][NUM_COLS];
         deltaTime = INITIAL_DELTA_TIME;
         createTimer();
+        setFocusable(true);
         keyAdapter = new MyKeyAdapter();
         addKeyListener(keyAdapter);
         initGame();
-        
+    }
+    
+    public Board(ScoreBoardIncrementer inc){
+        this();
+        scoreboard = inc;
+    }
+    
+    public void setScoreBoard(ScoreBoardIncrementer scBoard){
+        scoreboard = scBoard;
     }
     
     private void createTimer(){

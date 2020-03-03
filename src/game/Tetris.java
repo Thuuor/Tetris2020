@@ -29,7 +29,7 @@ public class Tetris extends javax.swing.JFrame {
     private void initComponents() {
 
         scoreBoard2 = new game.ScoreBoard();
-        board1 = new game.Board();
+        board1 = new Board(scoreBoard2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().add(scoreBoard2, java.awt.BorderLayout.PAGE_END);

@@ -5,7 +5,6 @@
  */
 package game;
 
-
 /**
  *
  * @author 10229590
@@ -18,6 +17,8 @@ public class ScoreBoard extends javax.swing.JPanel implements ScoreBoardIncremen
      */
     public ScoreBoard() {
         initComponents();
+        score = 0;
+        incrementScore(0);
     }
 
     public void incrementScore(int increment){
