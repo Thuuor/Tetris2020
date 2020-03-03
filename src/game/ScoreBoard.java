@@ -9,8 +9,9 @@ package game;
  *
  * @author 10229590
  */
-public class ScoreBoard extends javax.swing.JPanel {
+public class ScoreBoard extends javax.swing.JPanel implements ScoreBoardIncrementer{
 
+    private int score;
     /**
      * Creates new form ScoreBoard
      */
@@ -18,6 +19,10 @@ public class ScoreBoard extends javax.swing.JPanel {
         initComponents();
     }
 
+    public void incrementScore(int increment){
+        score += increment;
+        jLabel1.setText("" + score);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
