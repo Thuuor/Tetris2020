@@ -89,4 +89,5 @@ public class Tetris extends javax.swing.JFrame {
     private game.Board board1;
     private game.ScoreBoard scoreBoard2;
     // End of variables declaration//GEN-END:variables
+
 }

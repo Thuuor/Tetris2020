@@ -62,6 +62,7 @@ public class Board extends JPanel{
     }
 }
     
+    
     public Board(){
         super();
         setFocusable(true);
