@@ -47,11 +47,14 @@ public class Board extends JPanel{
                 
                 break;
             case KeyEvent.VK_DOWN:
-                    currentRow++;
+                if (canMove(currentRow + 1, currentCol)){
+                     currentRow++;
+                }
                 break;
             case KeyEvent.VK_ENTER:
                 timer.stop();
-                JOptionPane.showMessageDialog(Board.this,"Pause","Pause",JOptionPane.OK_OPTION);
+                Icon icon = new ImageIcon(getClass().getResource("/images/imagenpause.png"));
+                JOptionPane.showMessageDialog(Board.this,"","Pause",JOptionPane.OK_OPTION,icon);
                 
                 timer.start();
                 break;
@@ -100,7 +103,11 @@ public class Board extends JPanel{
     }
     
     private void moveCurrentShapeToBoard() {
-        
+        for (int i = 0; i < 4;i ++){
+            int row = currentRow + currentShape.getY(i);
+            int col = currentCol + currentShape.getX(i);
+            playBoard[row][col] = currentShape.getShape();
+        }
     }
     
     private void resetCurrentShape(){
@@ -123,12 +130,30 @@ public class Board extends JPanel{
     
     private boolean canMove(int newRow, int newCol){
         int leftBorder = newCol + currentShape.minX();
-        int rightBorder = newCol + currentShape.maxX(); 
+        int rightBorder = newCol + currentShape.maxX();
+        int bottomBorder = newRow + currentShape.maxY();
         
-        if (leftBorder < 0 || rightBorder >= NUM_COLS){
+        if (leftBorder < 0 || bottomBorder >= NUM_ROWS || rightBorder >= NUM_COLS){
+            return false;
+        }
+        if (currentPieceHitsBoard(newRow,newCol)){
             return false;
         }
         return true;
+    }
+    
+    public boolean currentPieceHitsBoard(int newRow, int newCol){
+        for (int i = 0; i < 4; i++){
+            int row = newRow + currentShape.getY(i);
+            int col = newCol + currentShape.getX(i);
+            if (row >= 0){
+                if (playBoard[row][col] != Tetrominoes.NoShape){
+                return true;
+                }
+            }
+            
+        }
+        return false;
     }
     
     @Override
