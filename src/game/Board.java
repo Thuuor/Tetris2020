@@ -23,9 +23,10 @@ public class Board extends JPanel{
     private Shape currentShape;
     private int currentRow;
     private int currentCol;
-    private static Timer timer;
+    private Timer timer;
     private int deltaTime;
     private MyKeyAdapter keyAdapter;
+    private ScoreBoardIncrementer scoreboard;
     
     class MyKeyAdapter extends KeyAdapter {
 
@@ -36,10 +37,11 @@ public class Board extends JPanel{
                 if (canMove(currentRow,currentCol - 1)) {
                     currentCol--;
                 }
-                
                 break;
             case KeyEvent.VK_RIGHT:
+                if (canMove(currentRow,currentCol + 1)) {
                     currentCol++;
+                }
                 break;
             case KeyEvent.VK_UP:
                 
@@ -49,8 +51,9 @@ public class Board extends JPanel{
                 break;
             case KeyEvent.VK_ENTER:
                 timer.stop();
-                ResumeBotton resumeBotton = new ResumeBotton();
-                resumeBotton.setVisible(true);
+                JOptionPane.showMessageDialog(Board.this,"Pause","Pause",JOptionPane.OK_OPTION);
+                
+                timer.start();
                 break;
             default:
                 break;
@@ -64,18 +67,38 @@ public class Board extends JPanel{
         setFocusable(true);
         playBoard = new Tetrominoes[NUM_ROWS][NUM_COLS];
         deltaTime = INITIAL_DELTA_TIME;
-        timer = new Timer(deltaTime, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                currentRow++;
-                
-                repaint();
-            }
-        });
+        createTimer();
         keyAdapter = new MyKeyAdapter();
         addKeyListener(keyAdapter);
         initGame();
         
+    }
+    
+    private void createTimer(){
+        timer = new Timer(deltaTime, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if (canMove(currentRow + 1, currentCol)){
+                    currentRow++;
+                    repaint();
+                    Toolkit.getDefaultToolkit().sync();
+                } else {
+                    moveCurrentShapeToBoard();
+                    resetCurrentShape();
+                }
+            }
+        });
+    }
+    
+    private void moveCurrentShapeToBoard() {
+        
+    }
+    
+    private void resetCurrentShape(){
+        currentRow = 0;
+        currentCol = NUM_COLS / 2;
+        currentShape = new Shape();
+        currentShape.setRandomShape();
     }
     
     public void initGame(){
@@ -84,10 +107,7 @@ public class Board extends JPanel{
                 playBoard[row][col] = Tetrominoes.NoShape;
             }
         }
-        currentRow = 0;
-        currentCol = NUM_COLS / 2;
-        currentShape = new Shape();
-        currentShape.setRandomShape();
+        resetCurrentShape();
         timer.start();
         
     } 
@@ -155,7 +175,8 @@ public class Board extends JPanel{
         g.drawLine(x + squareWidth() - 1, y + squareHeight() - 1, x + squareWidth() - 1, y + 1);
     }
     
-    public static Timer getTimer(){
+    public Timer getTimer(){
         return timer;
     }
+
 }
