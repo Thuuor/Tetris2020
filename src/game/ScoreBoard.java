@@ -66,4 +66,9 @@ public class ScoreBoard extends javax.swing.JPanel implements ScoreBoardIncremen
         score = 0;
         incrementScore(0);
     }
+
+    @Override
+    public int getScore() {
+        return score;
+    }
 }

@@ -18,6 +18,7 @@ public class Board extends JPanel{
     public static final int NUM_ROWS = 22;
     public static final int NUM_COLS = 10;
     public static final int INITIAL_DELTA_TIME = 500;
+    public static final int INITAL_ROW = -2;
     
     private Tetrominoes[][] playBoard;
     private Shape currentShape;
@@ -109,6 +110,9 @@ public class Board extends JPanel{
                     repaint();
                     Toolkit.getDefaultToolkit().sync();
                 } else {
+                    if (currentRow == INITAL_ROW){
+                        GameOver();
+                    }
                     moveCurrentShapeToBoard();
                     checkCompletedLines();
                     resetCurrentShape();
@@ -121,12 +125,15 @@ public class Board extends JPanel{
         for (int i = 0; i < 4;i ++){
             int row = currentRow + currentShape.getY(i);
             int col = currentCol + currentShape.getX(i);
-            playBoard[row][col] = currentShape.getShape();
+            if (row >= 0){
+                playBoard[row][col] = currentShape.getShape();
+            }
+            
         }
     }
     
     private void resetCurrentShape(){
-        currentRow = -2;
+        currentRow = INITAL_ROW;
         currentCol = NUM_COLS / 2;
         currentShape = new Shape();
         currentShape.setRandomShape();
@@ -140,7 +147,7 @@ public class Board extends JPanel{
         }
         resetCurrentShape();
         timer.start();
-        
+        repaint();
     } 
     
     private boolean canMove(Shape shape,int newRow, int newCol){
@@ -257,5 +264,11 @@ public class Board extends JPanel{
    public void NewGame(){
        initGame();
        scoreboard.resetScore();
+   }
+   
+   public void GameOver(){
+       timer.stop();
+       JOptionPane.showMessageDialog(null, "Game over man, your score is: " + scoreboard.getScore());
+       NewGame();
    }
 }
