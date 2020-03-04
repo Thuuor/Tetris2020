@@ -30,6 +30,12 @@ public class Tetris extends javax.swing.JFrame {
 
         scoreBoard2 = new game.ScoreBoard();
         board1 = new Board(scoreBoard2);
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenuGame = new javax.swing.JMenu();
+        jMenuNewGame = new javax.swing.JMenuItem();
+        jMenuExit = new javax.swing.JMenuItem();
+        jMenuAbout = new javax.swing.JMenu();
+        About = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().add(scoreBoard2, java.awt.BorderLayout.PAGE_END);
@@ -42,13 +48,65 @@ public class Tetris extends javax.swing.JFrame {
         );
         board1Layout.setVerticalGroup(
             board1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 388, Short.MAX_VALUE)
+            .addGap(0, 328, Short.MAX_VALUE)
         );
 
         getContentPane().add(board1, java.awt.BorderLayout.CENTER);
 
+        jMenuGame.setText("Game");
+
+        jMenuNewGame.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_SPACE, 0));
+        jMenuNewGame.setText("New Game");
+        jMenuNewGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuNewGameActionPerformed(evt);
+            }
+        });
+        jMenuGame.add(jMenuNewGame);
+
+        jMenuExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
+        jMenuExit.setText("Exit");
+        jMenuExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuExitActionPerformed(evt);
+            }
+        });
+        jMenuGame.add(jMenuExit);
+
+        jMenuBar1.add(jMenuGame);
+
+        jMenuAbout.setText("Info");
+
+        About.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
+        About.setText("About");
+        About.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AboutActionPerformed(evt);
+            }
+        });
+        jMenuAbout.add(About);
+
+        jMenuBar1.add(jMenuAbout);
+
+        setJMenuBar(jMenuBar1);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuNewGameActionPerformed
+        board1.NewGame();
+    }//GEN-LAST:event_jMenuNewGameActionPerformed
+
+    private void jMenuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExitActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jMenuExitActionPerformed
+
+    private void AboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AboutActionPerformed
+        board1.pauseGameAbout();
+        About about = new About(this, true);
+        about.setVisible(true);
+        board1.restartGameAbout();
+    }//GEN-LAST:event_AboutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -86,7 +144,13 @@ public class Tetris extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem About;
     private game.Board board1;
+    private javax.swing.JMenu jMenuAbout;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuExit;
+    private javax.swing.JMenu jMenuGame;
+    private javax.swing.JMenuItem jMenuNewGame;
     private game.ScoreBoard scoreBoard2;
     // End of variables declaration//GEN-END:variables
 

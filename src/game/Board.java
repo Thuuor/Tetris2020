@@ -34,39 +34,53 @@ public class Board extends JPanel{
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_LEFT:
-                if (canMove(currentRow,currentCol - 1)) {
+                if (canMove(currentShape,currentRow,currentCol - 1)) {
                     currentCol--;
                 }
                 break;
             case KeyEvent.VK_RIGHT:
-                if (canMove(currentRow,currentCol + 1)) {
+                if (canMove(currentShape,currentRow,currentCol + 1)) {
                     currentCol++;
                 }
                 break;
             case KeyEvent.VK_UP:
-                
+                Shape s = currentShape.rotateRight();
+                if (canMove(s,currentRow,currentCol)){
+                    currentShape = s;
+                }
                 break;
             case KeyEvent.VK_DOWN:
-                if (canMove(currentRow + 1, currentCol)){
+                if (canMove(currentShape,currentRow + 1, currentCol)){
                      currentRow++;
                 }
                 break;
             case KeyEvent.VK_ENTER:
-                timer.stop();
-                Icon icon = new ImageIcon(getClass().getResource("/images/imagenpause.png"));
-                JOptionPane.showMessageDialog(Board.this,"","Pause",JOptionPane.OK_OPTION,icon);
-                
-                timer.start();
+                pauseGame();
                 break;
             default:
                 break;
         }
         repaint();
     }
-}
+
+    }
+    private void pauseGame () throws HeadlessException {
+        timer.stop();
+        Icon icon = new ImageIcon(getClass().getResource("/images/imagenpause.png"));
+        JOptionPane.showMessageDialog(Board.this,"","Pause",JOptionPane.OK_OPTION,icon);
+        timer.start();
+    }
+    
+    public void pauseGameAbout() {
+        timer.stop();
+    }
+    
+    public void restartGameAbout(){
+        timer.start();
+    }
     
     
-    private Board(){
+    public Board(){
         super();
         playBoard = new Tetrominoes[NUM_ROWS][NUM_COLS];
         deltaTime = INITIAL_DELTA_TIME;
@@ -90,12 +104,13 @@ public class Board extends JPanel{
         timer = new Timer(deltaTime, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if (canMove(currentRow + 1, currentCol)){
+                if (canMove(currentShape,currentRow + 1, currentCol)){
                     currentRow++;
                     repaint();
                     Toolkit.getDefaultToolkit().sync();
                 } else {
                     moveCurrentShapeToBoard();
+                    checkCompletedLines();
                     resetCurrentShape();
                 }
             }
@@ -111,7 +126,7 @@ public class Board extends JPanel{
     }
     
     private void resetCurrentShape(){
-        currentRow = 0;
+        currentRow = -2;
         currentCol = NUM_COLS / 2;
         currentShape = new Shape();
         currentShape.setRandomShape();
@@ -128,12 +143,11 @@ public class Board extends JPanel{
         
     } 
     
-    private boolean canMove(int newRow, int newCol){
-        int leftBorder = newCol + currentShape.minX();
-        int rightBorder = newCol + currentShape.maxX();
-        int bottomBorder = newRow + currentShape.maxY();
+    private boolean canMove(Shape shape,int newRow, int newCol){
+        int leftBorder = newCol + shape.minX();
+        int rightBorder = newCol + shape.maxX();
         
-        if (leftBorder < 0 || bottomBorder >= NUM_ROWS || rightBorder >= NUM_COLS){
+        if (leftBorder < 0 || newRow + shape.maxY() >= NUM_ROWS || rightBorder >= NUM_COLS){
             return false;
         }
         if (currentPieceHitsBoard(newRow,newCol)){
@@ -213,4 +227,35 @@ public class Board extends JPanel{
         return timer;
     }
 
+    public void checkCompletedLines(){
+       
+       for (int row = 0; row < NUM_ROWS; row++) {
+           int count = 0;
+           for (int col = 0; col < NUM_COLS; col++) {
+               if(playBoard[row][col] != Tetrominoes.NoShape){
+                   count++;
+               }
+           }
+           if (count == NUM_COLS){
+               delLines(row);
+               scoreboard.incrementScore(10);
+           }
+       }
+   }
+   
+   public void delLines(int rowDeleted){
+       for (int row = rowDeleted; row > 1; row--) {
+           for (int col = 0; col < NUM_COLS; col++) {
+               playBoard[row][col] = playBoard[row-1][col];
+           }
+       }
+       for (int col = 0; col < NUM_COLS;col ++){
+           playBoard[0][col] = Tetrominoes.NoShape;
+       }
+   }
+   
+   public void NewGame(){
+       initGame();
+       scoreboard.resetScore();
+   }
 }

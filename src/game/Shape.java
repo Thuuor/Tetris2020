@@ -30,6 +30,11 @@ public class Shape {
         pieceShape = Tetrominoes.NoShape;
     }
     
+    public Shape(Tetrominoes shapeType){
+        this();
+        setShape(shapeType);
+    }
+    
     public void setShape(Tetrominoes shapeType){
         for (int i = 0;i < 4;i ++){
             for (int j = 0; j < 2;j ++){
@@ -108,9 +113,17 @@ public class Shape {
     public Shape rotateLeft(){
         
     }
-    
+    */
     public Shape rotateRight(){
-        
-    }*/
+        if (pieceShape == Tetrominoes.SquareShape){
+            return this;
+        }
+        Shape newShape = new Shape(pieceShape);
+        for (int i = 0; i < 4; i ++){
+            newShape.setX(i, -getY(i));
+            newShape.setY(i, getX(i));
+        }
+        return newShape;
+    }
     
 }

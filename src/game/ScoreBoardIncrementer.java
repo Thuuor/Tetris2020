@@ -12,4 +12,5 @@ package game;
  */
 public interface ScoreBoardIncrementer {
     public void incrementScore(int increment);
+    public void resetScore();
 }
