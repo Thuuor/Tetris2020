@@ -1,5 +1,7 @@
 package game;
 
+import javax.swing.JOptionPane;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -94,7 +96,13 @@ public class Tetris extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuNewGameActionPerformed
-        board1.NewGame();
+        board1.pauseGameAbout();
+        int option = JOptionPane.showConfirmDialog(null, "¿Seguro que quieres empezar una partida nueva?");
+        if (option == JOptionPane.YES_OPTION){
+            board1.NewGame();
+        } else {
+            board1.restartGameAbout();
+        }
     }//GEN-LAST:event_jMenuNewGameActionPerformed
 
     private void jMenuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExitActionPerformed
