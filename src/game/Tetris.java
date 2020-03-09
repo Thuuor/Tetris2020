@@ -31,10 +31,11 @@ public class Tetris extends javax.swing.JFrame {
     private void initComponents() {
 
         scoreBoard2 = new game.ScoreBoard();
-        board1 = new Board(scoreBoard2);
+        board1 = new Board(scoreBoard2,this);
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuGame = new javax.swing.JMenu();
         jMenuNewGame = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuExit = new javax.swing.JMenuItem();
         jMenuAbout = new javax.swing.JMenu();
         About = new javax.swing.JMenuItem();
@@ -46,11 +47,11 @@ public class Tetris extends javax.swing.JFrame {
         board1.setLayout(board1Layout);
         board1Layout.setHorizontalGroup(
             board1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 180, Short.MAX_VALUE)
+            .addGap(0, 181, Short.MAX_VALUE)
         );
         board1Layout.setVerticalGroup(
             board1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 328, Short.MAX_VALUE)
+            .addGap(0, 322, Short.MAX_VALUE)
         );
 
         getContentPane().add(board1, java.awt.BorderLayout.CENTER);
@@ -65,6 +66,15 @@ public class Tetris extends javax.swing.JFrame {
             }
         });
         jMenuGame.add(jMenuNewGame);
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.SHIFT_MASK));
+        jMenuItem1.setText("Scores");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenuGame.add(jMenuItem1);
 
         jMenuExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
         jMenuExit.setText("Exit");
@@ -99,7 +109,11 @@ public class Tetris extends javax.swing.JFrame {
         board1.pauseGameAbout();
         int option = JOptionPane.showConfirmDialog(null, "¿Seguro que quieres empezar una partida nueva?");
         if (option == JOptionPane.YES_OPTION){
-            board1.NewGame();
+            int option2 = JOptionPane.showConfirmDialog(null, "Game over man, your score is: " + board1.getScoreBoard() + ". You want to save your score?");
+            if (option2 == JOptionPane.YES_OPTION){
+                board1.SetNameInPlayer();
+                board1.NewGame();
+            }
         } else {
             board1.restartGameAbout();
         }
@@ -115,6 +129,13 @@ public class Tetris extends javax.swing.JFrame {
         about.setVisible(true);
         board1.restartGameAbout();
     }//GEN-LAST:event_AboutActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        board1.pauseGameAbout();
+        HighScore highScore = new HighScore(this, true);
+        highScore.setVisible(true);
+        board1.restartGameAbout();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -158,6 +179,7 @@ public class Tetris extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuExit;
     private javax.swing.JMenu jMenuGame;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuNewGame;
     private game.ScoreBoard scoreBoard2;
     // End of variables declaration//GEN-END:variables

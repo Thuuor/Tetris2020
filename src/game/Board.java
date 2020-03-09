@@ -28,6 +28,8 @@ public class Board extends JPanel{
     private int deltaTime;
     private MyKeyAdapter keyAdapter;
     private ScoreBoardIncrementer scoreboard;
+    private Player player;
+    private JFrame parent;
     
     class MyKeyAdapter extends KeyAdapter {
 
@@ -92,13 +94,18 @@ public class Board extends JPanel{
         initGame();
     }
     
-    public Board(ScoreBoardIncrementer inc){
+    public Board(ScoreBoardIncrementer inc,JFrame parent){
         this();
+        this.parent = parent;
         scoreboard = inc;
     }
     
     public void setScoreBoard(ScoreBoardIncrementer scBoard){
         scoreboard = scBoard;
+    }
+    
+    public int getScoreBoard(){
+        return scoreboard.getScore();
     }
     
     private void createTimer(){
@@ -268,7 +275,19 @@ public class Board extends JPanel{
    
    public void GameOver(){
        timer.stop();
-       JOptionPane.showMessageDialog(null, "Game over man, your score is: " + scoreboard.getScore());
-       NewGame();
+       int option = JOptionPane.showConfirmDialog(null, "Game over man, your score is: " + scoreboard.getScore() + ". You want to save your score?");
+       if (option == JOptionPane.YES_OPTION){
+           SetNameInPlayer();
+           NewGame();
+        } else {
+           NewGame();
+        }
+
    }
+
+    public void SetNameInPlayer() {
+        NameOfWinner nofw = new NameOfWinner(parent, true);
+        nofw.setVisible(true);
+    }
+   
 }
